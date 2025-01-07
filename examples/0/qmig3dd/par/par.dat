@@ -1,0 +1,36 @@
+ntl=1250
+dt=0.004000
+line1=299
+line2=380
+f1=1
+f2=3
+f3=100
+f4=115
+fc=30
+nh=6
+ntused=-1
+ngpu=1
+
+# Image Space
+zmin=400
+zmax=3000
+dzi=8
+cdp1=100
+cdp2=300
+line=350
+multi=1
+
+mute=(1600,500),(3200,800),(4800,2000),(6400,5000)
+extxline=100
+
+# Q Correction
+correction=a_p
+threshold=800
+freqkeep=8
+
+poolsize=33030144
+# Misc
+contract=8
+taperzone=10
+opcrp=1
+nblock=1
