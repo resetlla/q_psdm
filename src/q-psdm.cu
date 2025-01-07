@@ -237,50 +237,50 @@ void *producer(void *arg);
 void *consumer(void *arg);
 
 void qpsdm(int ngpu, int ndata, int ncons, int poolsize, char *projpath,
-             char *projtask, float dxi, int nxi, float dyi, int nyi, int nzi,
-             float dzi, float dzii, float zmin, int fcv, double fxv, int flv,
-             double fyv, int nxv, int nyv, int ntv, float dtv, int naxi,
-             int nayi, float daxi, float dayi, int line1, int line2, int nyd,
-             int fld, int ntl, float dt, float f1, float fc, float f3, float f4,
-             int *noffs, int extxline, int *iline, int fci, int iyi1,
-             float **offs, int *cdps, int ncdps, int nsmooth, double scaled,
-             float **tmute, char *infopath, int aspect, int opcrp,
-             char *outputpath, char *offspath, char *path, char *velfilepath,
-             char *dipdirpath, char *f3dirpath, char *ttpath, char *nodename,
-             float threshold, float contract, float taperzone, int nblock);
+           char *projtask, float dxi, int nxi, float dyi, int nyi, int nzi,
+           float dzi, float dzii, float zmin, int fcv, double fxv, int flv,
+           double fyv, int nxv, int nyv, int ntv, float dtv, int naxi, int nayi,
+           float daxi, float dayi, int line1, int line2, int nyd, int fld,
+           int ntl, float dt, float f1, float fc, float f3, float f4,
+           int *noffs, int extxline, int *iline, int fci, int iyi1,
+           float **offs, int *cdps, int ncdps, int nsmooth, double scaled,
+           float **tmute, char *infopath, int aspect, int opcrp,
+           char *outputpath, char *offspath, char *path, char *velfilepath,
+           char *dipdirpath, char *f3dirpath, char *ttpath, char *nodename,
+           float threshold, float contract, float taperzone, int nblock);
 
 void psdm_kernel(segy tr,
-                   // CPUParamsNoLine
-                   float dyi, float dxi, int nxi, int nzi, int ntl,
-                   double scaled, int fci, float dzi, int ndipx, int ndipy,
-                   float ddipx, float ddipy, float dt, float fc, float eps,
-                   int *iaztab, float fxv1, float fyv1, float exv1, float eyv1,
-                   int nfft, int nffti, float *ww, float dt1, int ndipx2,
-                   int ndipy2, float taperzone, float lnG, float coef1,
-                   float coef2, float coef3, float coef4, float dzii,
-                   // CPUParamsWithLine
-                   int ****aper, int **aznx1, int **aznx2, int **azny1,
-                   int **azny2, double fxi, double cyi, float dw, int ioffs,
+                 // CPUParamsNoLine
+                 float dyi, float dxi, int nxi, int nzi, int ntl, double scaled,
+                 int fci, float dzi, int ndipx, int ndipy, float ddipx,
+                 float ddipy, float dt, float fc, float eps, int *iaztab,
+                 float fxv1, float fyv1, float exv1, float eyv1, int nfft,
+                 int nffti, float *ww, float dt1, int ndipx2, int ndipy2,
+                 float taperzone, float lnG, float coef1, float coef2,
+                 float coef3, float coef4, float dzii,
+                 // CPUParamsWithLine
+                 int ****aper, int **aznx1, int **aznx2, int **azny1,
+                 int **azny2, double fxi, double cyi, float dw, int ioffs,
 #ifdef QMIG3D
-                   int itb1, int itb2, int nsb, float tdstart1, float tdstart2,
-                   int nf1, float tdmid,
+                 int itb1, int itb2, int nsb, float tdstart1, float tdstart2,
+                 int nf1, float tdmid,
 #endif
-                   int nww, int nxg, int nzg, int nxi1, int nzi1, int ttt_cdp1,
-                   int ttt_cdp2, int qqq_cdp1, int qqq_cdp2, int ncoef1,
-                   int ixstart, int ixend, int nxb,
+                 int nww, int nxg, int nzg, int nxi1, int nzi1, int ttt_cdp1,
+                 int ttt_cdp2, int qqq_cdp1, int qqq_cdp2, int ncoef1,
+                 int ixstart, int ixend, int nxb,
 // GPUParamsNoLine
 #ifdef QMIG3D
-                   float *re, float *im, float *red, float *imd,
+                 float *re, float *im, float *red, float *imd,
 #endif
-                   int igpu, int *itibeg, int *itibegd,
+                 int igpu, int *itibeg, int *itibegd,
 // GPUParamsWithLine
 #ifdef QMIG3D
-                   int *nf3d, float *Qd, float *datav, fftwf_complex *wdatav,
-                   fftwf_plan planv, ttt_desc_t *qqq_descd, float *qqqd,
+                 int *nf3d, float *Qd, float *datav, fftwf_complex *wdatav,
+                 fftwf_plan planv, ttt_desc_t *qqq_descd, float *qqqd,
 #endif
-                   float *data, float *datad, float *dipx1d, float *dipx2d,
-                   float *dipy1d, float *dipy2d, ttt_desc_t *ttt_descd,
-                   float *tttd, float *imgd);
+                 float *data, float *datad, float *dipx1d, float *dipx2d,
+                 float *dipy1d, float *dipy2d, ttt_desc_t *ttt_descd,
+                 float *tttd, float *imgd);
 
 __global__ void image_depth_gpu(
     float *img, int izimin, int nzi, float *data, int nt, float dt, int ixstart,
@@ -939,43 +939,6 @@ int main(int argc, char *argv[]) {
   /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
   dxi = dxv;
   dyi = dyv;
-
-  /* 读取检测点信息 */
-  /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-  iyi1 = 0;
-  sprintf(str, "%s/break_point.txt", offspath);
-  if (exist(str)) /* 文件存在 */
-  {
-    fp = fopen(str, "r");
-    if (fscanf(fp, "%d\n", &ilb) != 1) {
-      fprintf(stderr, "Read ilb from %s fail! in LINE:%d\n", str, __LINE__);
-      fprintf(fplog, "Read ilb from %s fail! in LINE:%d\n", str, __LINE__);
-      fflush(fplog);
-      exit(1);
-    }
-    fclose(fp);
-
-    for (iyi1 = 0; iyi1 < nyi; ++iyi1) {
-      if (iline[iyi1] == ilb) {
-        ++iyi1;
-        break;
-      }
-    }
-
-    if (iyi1 >= nyi) {
-      fprintf(stderr, "Info: On %s, Job has been Finished\n", nodename);
-      fprintf(fplog, "Info: On %s, Job has been Finished\n", nodename);
-      fflush(fplog);
-      exit(1);
-    } else {
-      fprintf(stderr, "Info: On %s, Job Goes On From Line%d\n", nodename,
-              iline[iyi1]);
-      fprintf(fplog, "Info: On %s, Job Goes On From Line%d\n", nodename,
-              iline[iyi1]);
-      fflush(fplog);
-    }
-  }
-
   /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
   char nodename0[128];
   noffpath = alloc1char(1024);
@@ -1078,12 +1041,12 @@ int main(int argc, char *argv[]) {
   time(&tic);
 
   qpsdm(ngpu, ndata, ncons, poolsize, projpath, projtask, dxi, nxi, dyi, nyi,
-          nzi, dzi, dzii, zmin, fcv, fxv, flv, fyv, nxv, nyv, ntv, dtv, ndipx,
-          ndipy, ddipx, ddipy, line1, line2, nyd, fld, ntl, dt, f1, fc, f3, f4,
-          noffs, xline, iline, fci, iyi1, offs, cdps, ncdps, nsmooth, scaled,
-          tmute, infopath, aspect, opcrp, outputpath, offspath, path,
-          velfilepath, dipdirpath, f3dirpath, ttpath, nodename, threshold,
-          contract, taperzone, nblock);
+        nzi, dzi, dzii, zmin, fcv, fxv, flv, fyv, nxv, nyv, ntv, dtv, ndipx,
+        ndipy, ddipx, ddipy, line1, line2, nyd, fld, ntl, dt, f1, fc, f3, f4,
+        noffs, xline, iline, fci, iyi1, offs, cdps, ncdps, nsmooth, scaled,
+        tmute, infopath, aspect, opcrp, outputpath, offspath, path, velfilepath,
+        dipdirpath, f3dirpath, ttpath, nodename, threshold, contract, taperzone,
+        nblock);
 
   time(&toc);
 
@@ -1095,21 +1058,27 @@ int main(int argc, char *argv[]) {
   fprintf(fplog, "\nTime: %s", ctime(&toc));
   fflush(fplog);
 
+  // sprintf(str, "%s/break_point.txt", offspath);
+  // unlink(str);
+
+  // fprintf(fplog, "unlink BreakPoint:%s\n", str);
+  // fflush(fplog);
+
   return 0;
 }
 
 void qpsdm(int ngpu, int ndata, int ncons, int poolsize, char *projpath,
-             char *projtask, float dxi, int nxi, float dyi, int nyi, int nzi,
-             float dzi, float dzii, float zmin, int fcv, double fxv, int flv,
-             double fyv, int nxv, int nyv, int ntv, float dtv, int ndipx,
-             int ndipy, float ddipx, float ddipy, int line1, int line2, int nyd,
-             int fld, int ntl, float dt, float f1, float fc, float ff3,
-             float f4, int *noffs, int extxline, int *iline, int fci, int iyi1,
-             float **offs, int *cdps, int ncdps, int nsmooth, double scaled,
-             float **tmute, char *infopath, int aspect, int opcrp,
-             char *outputpath, char *offspath, char *path, char *velfilepath,
-             char *dipdirpath, char *f3dirpath, char *ttpath, char *nodename,
-             float threshold, float contract, float taperzone, int nblock) {
+           char *projtask, float dxi, int nxi, float dyi, int nyi, int nzi,
+           float dzi, float dzii, float zmin, int fcv, double fxv, int flv,
+           double fyv, int nxv, int nyv, int ntv, float dtv, int ndipx,
+           int ndipy, float ddipx, float ddipy, int line1, int line2, int nyd,
+           int fld, int ntl, float dt, float f1, float fc, float ff3, float f4,
+           int *noffs, int extxline, int *iline, int fci, int iyi1,
+           float **offs, int *cdps, int ncdps, int nsmooth, double scaled,
+           float **tmute, char *infopath, int aspect, int opcrp,
+           char *outputpath, char *offspath, char *path, char *velfilepath,
+           char *dipdirpath, char *f3dirpath, char *ttpath, char *nodename,
+           float threshold, float contract, float taperzone, int nblock) {
   (void)ngpu;
   (void)(nyd);
   (void)(fld);
@@ -2092,37 +2061,37 @@ void *consumer(void *arg) {
 }
 
 void psdm_kernel(segy tr,
-                   // CPUParamsNoLine
-                   float dyi, float dxi, int nxi, int nzi, int ntl,
-                   double scaled, int fci, float dzi, int ndipx, int ndipy,
-                   float ddipx, float ddipy, float dt, float fc, float eps,
-                   int *iaztab, float fxv1, float fyv1, float exv1, float eyv1,
-                   int nfft, int nffti, float *ww, float dt1, int ndipx2,
-                   int ndipy2, float taperzone, float lnG, float coef1,
-                   float coef2, float coef3, float coef4, float dzii,
-                   // CPUParamsWithLine
-                   int ****aper, int **aznx1, int **aznx2, int **azny1,
-                   int **azny2, double fxi, double cyi, float dw, int ioffs,
+                 // CPUParamsNoLine
+                 float dyi, float dxi, int nxi, int nzi, int ntl, double scaled,
+                 int fci, float dzi, int ndipx, int ndipy, float ddipx,
+                 float ddipy, float dt, float fc, float eps, int *iaztab,
+                 float fxv1, float fyv1, float exv1, float eyv1, int nfft,
+                 int nffti, float *ww, float dt1, int ndipx2, int ndipy2,
+                 float taperzone, float lnG, float coef1, float coef2,
+                 float coef3, float coef4, float dzii,
+                 // CPUParamsWithLine
+                 int ****aper, int **aznx1, int **aznx2, int **azny1,
+                 int **azny2, double fxi, double cyi, float dw, int ioffs,
 #ifdef QMIG3D
-                   int itb1, int itb2, int nsb, float tdstart1, float tdstart2,
-                   int nf1, float tdmid,
+                 int itb1, int itb2, int nsb, float tdstart1, float tdstart2,
+                 int nf1, float tdmid,
 #endif
-                   int nww, int nxg, int nzg, int nxi1, int nzi1, int ttt_cdp1,
-                   int ttt_cdp2, int qqq_cdp1, int qqq_cdp2, int ncoef1,
-                   int ixstart, int ixend, int nxb,
+                 int nww, int nxg, int nzg, int nxi1, int nzi1, int ttt_cdp1,
+                 int ttt_cdp2, int qqq_cdp1, int qqq_cdp2, int ncoef1,
+                 int ixstart, int ixend, int nxb,
 // GPUParamsNoLine
 #ifdef QMIG3D
-                   float *re, float *im, float *red, float *imd,
+                 float *re, float *im, float *red, float *imd,
 #endif
-                   int igpu, int *itibeg, int *itibegd,
+                 int igpu, int *itibeg, int *itibegd,
 // GPUParamsWithLine
 #ifdef QMIG3D
-                   int *nf3d, float *Qd, float *datav, fftwf_complex *wdatav,
-                   fftwf_plan planv, ttt_desc_t *qqq_descd, float *qqqd,
+                 int *nf3d, float *Qd, float *datav, fftwf_complex *wdatav,
+                 fftwf_plan planv, ttt_desc_t *qqq_descd, float *qqqd,
 #endif
-                   float *data, float *datad, float *dipx1d, float *dipx2d,
-                   float *dipy1d, float *dipy2d, ttt_desc_t *ttt_descd,
-                   float *tttd, float *imgd) {
+                 float *data, float *datad, float *dipx1d, float *dipx2d,
+                 float *dipy1d, float *dipy2d, ttt_desc_t *ttt_descd,
+                 float *tttd, float *imgd) {
   cudaSetDevice(igpu);
   (void)nxi;
   (void)dt;
