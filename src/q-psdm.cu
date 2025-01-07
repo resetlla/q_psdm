@@ -1462,8 +1462,6 @@ void qpsdm(int ngpu, int ndata, int ncons, int poolsize, char *projpath,
     fxi = fxv + (fci - fcv) * dxi;
     cyi = fyv + (line - flv) * dyi;
 
-    // fprintf(fplog,"fxi=%f fxv=%f fci=%d fcv=%d
-    // dxi=%f\n",fxi,fxv,fci,fcv,dxi);
     fprintf(fplog, "Start Image Line:%d\n", line);
 
     /* 确定一个偏移距文件夹下,对该成像线有贡献的数据域线范围 */
