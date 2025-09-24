@@ -29,13 +29,8 @@
 #endif
 
 const char *sdoc[] = {
-#ifdef DMIG3D_WITHOUT_GATHER
     "Prestack Depth Migration: Dip Migration With Multithreading             "
     "\n",
-#else
-    "Prestack Depth Migration: Generate Dip-Angle Gather With Multithreading "
-    "\n",
-#endif
     "                          Using grid travel time table                  "
     "\n",
     " dgthr3dz\033[1;31m path=/..  parfilepath=.. nodename=**_[0|1..]         "
